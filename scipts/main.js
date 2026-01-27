@@ -2,25 +2,18 @@
 // This function is called when any of the tab is clicked
 // It is adapted from https://www.w3schools.com/howto/howto_js_tabs.asp
 
-function openInfo(evt, tabName) {
+function openInfo(btn, tabName) {
+  const tabcontent = document.getElementsByClassName("tabcontent");
+  for (let i = 0; i < tabcontent.length; i++) tabcontent[i].style.display = "none";
 
-	// Get all elements with class="tabcontent" and hide them
-	tabcontent = document.getElementsByClassName("tabcontent");
-	for (i = 0; i < tabcontent.length; i++) {
-		tabcontent[i].style.display = "none";
-	}
+  const tablinks = document.getElementsByClassName("tablinks");
+  for (let i = 0; i < tablinks.length; i++)
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
 
-	// Get all elements with class="tablinks" and remove the class "active"
-	tablinks = document.getElementsByClassName("tablinks");
-	for (i = 0; i < tablinks.length; i++) {
-		tablinks[i].className = tablinks[i].className.replace(" active", "");
-	}
-
-	// Show the current tab, and add an "active" class to the button that opened the tab
-	document.getElementById(tabName).style.display = "block";
-	evt.currentTarget.className += " active";
-
+  document.getElementById(tabName).style.display = "block";
+  btn.className += " active";
 }
+
 
 
 	
@@ -92,15 +85,15 @@ function selectedItems(){
 		
 }
 
-function getUserPreferences() {
-  const vegetarian = document.getElementById("prefVegetarian")?.checked || false;
-  const glutenFree = document.getElementById("prefGlutenFree")?.checked || false;
+// function getUserPreferences() {
+//   const vegetarian = document.getElementById("prefVegetarian")?.checked || false;
+//   const glutenFree = document.getElementById("prefGlutenFree")?.checked || false;
 
-  const organicChoice =
-    document.querySelector('input[name="prefOrganic"]:checked')?.value || "Any";
+//   const organicChoice =
+//     document.querySelector('input[name="prefOrganic"]:checked')?.value || "Any";
 
-  return { vegetarian, glutenFree, organicChoice };
-}
+//   return { vegetarian, glutenFree, organicChoice };
+// }
 
 function populateListProductChoicesFromPrefs(prefs, divId) {
   const s2 = document.getElementById(divId);
@@ -200,3 +193,61 @@ function displayProducts(filteredProducts) {
     container.appendChild(label);
   });
 }
+
+function getUserPreferences() {
+  const vegetarian = document.getElementById("prefVegetarian")?.checked || false;
+  const glutenFree = document.getElementById("prefGlutenFree")?.checked || false;
+
+  const organicChoice =
+    document.querySelector('input[name="prefOrganic"]:checked')?.value || "Any";
+
+  return { vegetarian, glutenFree, organicChoice };
+}
+
+function populateProductsFromPrefs(prefs, divId) {
+  const s2 = document.getElementById(divId);
+  s2.innerHTML = "";
+
+  // THIS requires restrictListProducts to support prefs (I’ll give you that next)
+  const optionArray = restrictListProducts(products, prefs);
+
+  if (!optionArray || optionArray.length === 0) {
+    s2.textContent = "No products match your preferences.";
+    return;
+  }
+
+  for (let i = 0; i < optionArray.length; i++) {
+    const productName = optionArray[i];
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.name = "product";
+    checkbox.value = productName;
+
+    const label = document.createElement("label");
+    label.appendChild(document.createTextNode(" " + productName));
+
+    // show price (optional)
+    const prodObj = products.find(p => p.name === productName);
+    if (prodObj) label.appendChild(document.createTextNode(` — $${prodObj.price.toFixed(2)}`));
+
+    s2.appendChild(checkbox);
+    s2.appendChild(label);
+    s2.appendChild(document.createElement("br"));
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const btn = document.getElementById("applyPrefsBtn");
+  if (!btn) return;
+
+  btn.addEventListener("click", () => {
+    const prefs = getUserPreferences();
+    populateProductsFromPrefs(prefs, "displayProduct");
+
+    // switch to Products tab (click the Products button programmatically)
+    const productsBtn = document.querySelectorAll(".tablinks")[1];
+    openInfo(productsBtn, "Products");
+  });
+});
+

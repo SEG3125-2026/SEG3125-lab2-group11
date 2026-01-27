@@ -92,3 +92,42 @@ function selectedItems(){
 		
 }
 
+function getUserPreferences() {
+  const vegetarian = document.getElementById("prefVegetarian")?.checked || false;
+  const glutenFree = document.getElementById("prefGlutenFree")?.checked || false;
+
+  const organicChoice =
+    document.querySelector('input[name="prefOrganic"]:checked')?.value || "Any";
+
+  return { vegetarian, glutenFree, organicChoice };
+}
+
+function showPrefsSummary(prefs) {
+  const summary = document.getElementById("prefsSummary");
+  if (!summary) return;
+
+  const parts = [];
+  if (prefs.vegetarian) parts.push("Vegetarian");
+  if (prefs.glutenFree) parts.push("Gluten-free");
+  if (prefs.organicChoice !== "Any") parts.push(`Preference: ${prefs.organicChoice}`);
+
+  summary.textContent =
+    parts.length > 0
+      ? `Saved: ${parts.join(" • ")}`
+      : "Saved: No restrictions / no preference";
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const btn = document.getElementById("applyPrefsBtn");
+  if (!btn) return;
+
+  btn.addEventListener("click", () => {
+    const prefs = getUserPreferences();
+    showPrefsSummary(prefs);
+
+    // NOTE: This is where Products filtering would get triggered later.
+    // For "customer page only", we stop here.
+    // Example later: populateProductsUsingPrefs(prefs);
+  });
+});
+

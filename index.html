@@ -16,16 +16,57 @@
 
 <!-- Tab content -->
 <div id="Client" class="tabcontent">
-  <h3>Client Information</h3>
-  <p>Tell us a bit about you.</p>
-	Choose a Category:
-	<select id="dietSelect" name="dietSelect" onchange="populateListProductChoices(this.id, 'displayProduct')">
-	<option value=""></option>
-	<option value="Vegetarian">Vegetarian</option>
-    <option value="GlutenFree">GlutenFree</option>
-    <option value="None">None</option>
-	</select>
+  <h2>Online Grocery Store</h2>
+  <h3>Customer Information</h3>
+  <p>Tell us a bit about you so we can filter products for you.</p>
+
+  <fieldset>
+    <legend>Dietary Restrictions</legend>
+
+    <label>
+      <input type="checkbox" id="prefVegetarian" />
+      Vegetarian (no meat/fish)
+    </label>
+    <br />
+
+    <label>
+      <input type="checkbox" id="prefGlutenFree" />
+      Gluten intolerance (no wheat/gluten)
+    </label>
+  </fieldset>
+
+  <br />
+
+  <fieldset>
+    <legend>Preference</legend>
+
+    <label>
+      <input type="radio" name="prefOrganic" value="Any" checked />
+      No preference
+    </label>
+    <br />
+
+    <label>
+      <input type="radio" name="prefOrganic" value="Organic" />
+      Prefer organic
+    </label>
+    <br />
+
+    <label>
+      <input type="radio" name="prefOrganic" value="NonOrganic" />
+      Prefer non-organic
+    </label>
+  </fieldset>
+
+  <br />
+
+  <button type="button" id="applyPrefsBtn">
+    Apply my preferences
+  </button>
+
+  <p id="prefsSummary" style="margin-top: 10px;"></p>
 </div>
+
 
 <div id="Products" class="tabcontent">
   <h3>Your targeted products</h3>

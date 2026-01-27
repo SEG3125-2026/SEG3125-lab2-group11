@@ -2,25 +2,18 @@
 // This function is called when any of the tab is clicked
 // It is adapted from https://www.w3schools.com/howto/howto_js_tabs.asp
 
-function openInfo(evt, tabName) {
+function openInfo(btn, tabName) {
+  const tabcontent = document.getElementsByClassName("tabcontent");
+  for (let i = 0; i < tabcontent.length; i++) tabcontent[i].style.display = "none";
 
-	// Get all elements with class="tabcontent" and hide them
-	tabcontent = document.getElementsByClassName("tabcontent");
-	for (i = 0; i < tabcontent.length; i++) {
-		tabcontent[i].style.display = "none";
-	}
+  const tablinks = document.getElementsByClassName("tablinks");
+  for (let i = 0; i < tablinks.length; i++)
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
 
-	// Get all elements with class="tablinks" and remove the class "active"
-	tablinks = document.getElementsByClassName("tablinks");
-	for (i = 0; i < tablinks.length; i++) {
-		tablinks[i].className = tablinks[i].className.replace(" active", "");
-	}
-
-	// Show the current tab, and add an "active" class to the button that opened the tab
-	document.getElementById(tabName).style.display = "block";
-	evt.currentTarget.className += " active";
-
+  document.getElementById(tabName).style.display = "block";
+  btn.className += " active";
 }
+
 
 
 	
@@ -92,15 +85,46 @@ function selectedItems(){
 		
 }
 
-function getUserPreferences() {
-  const vegetarian = document.getElementById("prefVegetarian")?.checked || false;
-  const glutenFree = document.getElementById("prefGlutenFree")?.checked || false;
+// function getUserPreferences() {
+//   const vegetarian = document.getElementById("prefVegetarian")?.checked || false;
+//   const glutenFree = document.getElementById("prefGlutenFree")?.checked || false;
 
-  const organicChoice =
-    document.querySelector('input[name="prefOrganic"]:checked')?.value || "Any";
+//   const organicChoice =
+//     document.querySelector('input[name="prefOrganic"]:checked')?.value || "Any";
 
-  return { vegetarian, glutenFree, organicChoice };
+//   return { vegetarian, glutenFree, organicChoice };
+// }
+
+function populateListProductChoicesFromPrefs(prefs, divId) {
+  const s2 = document.getElementById(divId);
+  s2.innerHTML = "";
+
+  // This now works because restrictListProducts supports prefs objects
+  const optionArray = restrictListProducts(products, prefs);
+
+  for (let i = 0; i < optionArray.length; i++) {
+    const productName = optionArray[i];
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.name = "product";
+    checkbox.value = productName;
+    s2.appendChild(checkbox);
+
+    const label = document.createElement("label");
+    label.htmlFor = productName;
+
+    // Show name + price
+    const prodObj = products.find(p => p.name === productName);
+    const priceText = prodObj ? ` — $${prodObj.price.toFixed(2)}` : "";
+
+    label.appendChild(document.createTextNode(productName + priceText));
+    s2.appendChild(label);
+
+    s2.appendChild(document.createElement("br"));
+  }
 }
+
 
 function showPrefsSummary(prefs) {
   const summary = document.getElementById("prefsSummary");
@@ -121,13 +145,109 @@ document.addEventListener("DOMContentLoaded", () => {
   const btn = document.getElementById("applyPrefsBtn");
   if (!btn) return;
 
+  btn.addEventListener("click", (event) => {
+    const prefs = getUserPreferences();
+
+    populateListProductChoicesFromPrefs(prefs, "displayProduct");
+
+    // optional: switch to Products tab after applying
+    openInfo(event, "Products");
+  });
+});
+
+
+function filterProducts(products, prefs) {
+  return products.filter(product => {
+    if (prefs.vegetarian && !product.vegetarian) return false;
+    if (prefs.glutenFree && !product.glutenFree) return false;
+
+    if (prefs.organicChoice === "Organic" && !product.organic) return false;
+    if (prefs.organicChoice === "NonOrganic" && product.organic) return false;
+
+    return true;
+  });
+}
+
+function displayProducts(filteredProducts) {
+  const container = document.getElementById("productList");
+  container.innerHTML = "";
+
+  if (filteredProducts.length === 0) {
+    container.textContent = "No products match your preferences.";
+    return;
+  }
+
+  filteredProducts.forEach(product => {
+    const label = document.createElement("label");
+    label.style.display = "block";
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.value = product.name;
+
+    label.appendChild(checkbox);
+    label.append(
+      ` ${product.name} — $${product.price.toFixed(2)}`
+    );
+
+    container.appendChild(label);
+  });
+}
+
+function getUserPreferences() {
+  const vegetarian = document.getElementById("prefVegetarian")?.checked || false;
+  const glutenFree = document.getElementById("prefGlutenFree")?.checked || false;
+
+  const organicChoice =
+    document.querySelector('input[name="prefOrganic"]:checked')?.value || "Any";
+
+  return { vegetarian, glutenFree, organicChoice };
+}
+
+function populateProductsFromPrefs(prefs, divId) {
+  const s2 = document.getElementById(divId);
+  s2.innerHTML = "";
+
+  // THIS requires restrictListProducts to support prefs (I’ll give you that next)
+  const optionArray = restrictListProducts(products, prefs);
+
+  if (!optionArray || optionArray.length === 0) {
+    s2.textContent = "No products match your preferences.";
+    return;
+  }
+
+  for (let i = 0; i < optionArray.length; i++) {
+    const productName = optionArray[i];
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.name = "product";
+    checkbox.value = productName;
+
+    const label = document.createElement("label");
+    label.appendChild(document.createTextNode(" " + productName));
+
+    // show price (optional)
+    const prodObj = products.find(p => p.name === productName);
+    if (prodObj) label.appendChild(document.createTextNode(` — $${prodObj.price.toFixed(2)}`));
+
+    s2.appendChild(checkbox);
+    s2.appendChild(label);
+    s2.appendChild(document.createElement("br"));
+  }
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+  const btn = document.getElementById("applyPrefsBtn");
+  if (!btn) return;
+
   btn.addEventListener("click", () => {
     const prefs = getUserPreferences();
-    showPrefsSummary(prefs);
+    populateProductsFromPrefs(prefs, "displayProduct");
 
-    // NOTE: This is where Products filtering would get triggered later.
-    // For "customer page only", we stop here.
-    // Example later: populateProductsUsingPrefs(prefs);
+    // switch to Products tab (click the Products button programmatically)
+    const productsBtn = document.querySelectorAll(".tablinks")[1];
+    openInfo(productsBtn, "Products");
   });
 });
 

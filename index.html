@@ -1,19 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<! This style sheet is taken from  https://www.w3schools.com/howto/howto_js_tabs.asp>
 <link rel="stylesheet" href="styles/style.css">
-<script src="scripts/groceries.js"></script>
-<script src="scripts/main.js"></script>
+
 </head>
 
 <body>
 
 <!-- Tab links, each one with an onclick event associated with it -->
 <div class="tab">
-  <button class="tablinks" onclick="openInfo(event, 'Client')">Client</button>
-  <button class="tablinks" onclick="openInfo(event, 'Products')">Products</button>
-  <button class="tablinks" onclick="openInfo(event, 'Cart')">Cart</button>
+  <button class="tablinks" onclick="openInfo(this, 'Client')">Client</button>
+  <button class="tablinks" onclick="openInfo(this, 'Products')">Products</button>
+  <button class="tablinks" onclick="openInfo(this, 'Cart')">Cart</button>
+
 </div>
 
 <!-- Tab content -->

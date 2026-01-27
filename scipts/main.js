@@ -102,6 +102,37 @@ function getUserPreferences() {
   return { vegetarian, glutenFree, organicChoice };
 }
 
+function populateListProductChoicesFromPrefs(prefs, divId) {
+  const s2 = document.getElementById(divId);
+  s2.innerHTML = "";
+
+  // This now works because restrictListProducts supports prefs objects
+  const optionArray = restrictListProducts(products, prefs);
+
+  for (let i = 0; i < optionArray.length; i++) {
+    const productName = optionArray[i];
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.name = "product";
+    checkbox.value = productName;
+    s2.appendChild(checkbox);
+
+    const label = document.createElement("label");
+    label.htmlFor = productName;
+
+    // Show name + price
+    const prodObj = products.find(p => p.name === productName);
+    const priceText = prodObj ? ` — $${prodObj.price.toFixed(2)}` : "";
+
+    label.appendChild(document.createTextNode(productName + priceText));
+    s2.appendChild(label);
+
+    s2.appendChild(document.createElement("br"));
+  }
+}
+
+
 function showPrefsSummary(prefs) {
   const summary = document.getElementById("prefsSummary");
   if (!summary) return;
@@ -121,13 +152,51 @@ document.addEventListener("DOMContentLoaded", () => {
   const btn = document.getElementById("applyPrefsBtn");
   if (!btn) return;
 
-  btn.addEventListener("click", () => {
+  btn.addEventListener("click", (event) => {
     const prefs = getUserPreferences();
-    showPrefsSummary(prefs);
 
-    // NOTE: This is where Products filtering would get triggered later.
-    // For "customer page only", we stop here.
-    // Example later: populateProductsUsingPrefs(prefs);
+    populateListProductChoicesFromPrefs(prefs, "displayProduct");
+
+    // optional: switch to Products tab after applying
+    openInfo(event, "Products");
   });
 });
 
+
+function filterProducts(products, prefs) {
+  return products.filter(product => {
+    if (prefs.vegetarian && !product.vegetarian) return false;
+    if (prefs.glutenFree && !product.glutenFree) return false;
+
+    if (prefs.organicChoice === "Organic" && !product.organic) return false;
+    if (prefs.organicChoice === "NonOrganic" && product.organic) return false;
+
+    return true;
+  });
+}
+
+function displayProducts(filteredProducts) {
+  const container = document.getElementById("productList");
+  container.innerHTML = "";
+
+  if (filteredProducts.length === 0) {
+    container.textContent = "No products match your preferences.";
+    return;
+  }
+
+  filteredProducts.forEach(product => {
+    const label = document.createElement("label");
+    label.style.display = "block";
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.value = product.name;
+
+    label.appendChild(checkbox);
+    label.append(
+      ` ${product.name} — $${product.price.toFixed(2)}`
+    );
+
+    container.appendChild(label);
+  });
+}

@@ -4,16 +4,19 @@
 
 // Product list (10 items)
 var products = [
-  { name: "brocoli",        vegetarian: true,  glutenFree: true,  organic: true,  price: 1.99 },
-  { name: "bread",          vegetarian: true,  glutenFree: false, organic: false, price: 2.35 },
-  { name: "salmon",         vegetarian: false, glutenFree: true,  organic: false, price: 10.00 },
-  { name: "tofu",           vegetarian: true,  glutenFree: true,  organic: true,  price: 3.49 },
-  { name: "chicken breast", vegetarian: false, glutenFree: true,  organic: true,  price: 7.99 },
-  { name: "pasta",          vegetarian: true,  glutenFree: false, organic: false, price: 2.89 },
-  { name: "eggs",           vegetarian: true,  glutenFree: true,  organic: true,  price: 4.29 },
-  { name: "milk",           vegetarian: true,  glutenFree: true,  organic: false, price: 2.79 },
-  { name: "apples",         vegetarian: true,  glutenFree: true,  organic: true,  price: 3.99 },
-  { name: "ground beef",    vegetarian: false, glutenFree: true,  organic: false, price: 8.49 }
+  { name: "brocoli",              vegetarian: true,  glutenFree: true,  organic: true,  vegan: true,   lactoseFree: true,  price: 1.99 },
+  { name: "bread",                vegetarian: true,  glutenFree: false, organic: false, vegan: false,  lactoseFree: true,  price: 2.35 },
+  { name: "salmon",               vegetarian: false, glutenFree: true,  organic: false, vegan: false,  lactoseFree: true,  price: 10.00 },
+  { name: "tofu",                 vegetarian: true,  glutenFree: true,  organic: true,  vegan: true,   lactoseFree: true,  price: 3.49 },
+  { name: "chicken breast",       vegetarian: false, glutenFree: true,  organic: true,  vegan: false,  lactoseFree: true,  price: 7.99 },
+  { name: "pasta",                vegetarian: true,  glutenFree: false, organic: false, vegan: false,  lactoseFree: true,  price: 2.89 },
+  { name: "eggs",                 vegetarian: true,  glutenFree: true,  organic: true,  vegan: false,  lactoseFree: true,  price: 4.29 },
+  { name: "milk",                 vegetarian: true,  glutenFree: true,  organic: false, vegan: false,  lactoseFree: false, price: 2.79 },
+  { name: "apples",               vegetarian: true,  glutenFree: true,  organic: true,  vegan: true,   lactoseFree: true,  price: 3.99 },
+  { name: "ground beef",          vegetarian: false, glutenFree: true,  organic: false, vegan: false,  lactoseFree: true,  price: 8.49 },
+  { name: "lactose-free milk",    vegetarian: true,  glutenFree: true,  organic: false, vegan: false,  lactoseFree: true,  price: 6.79 },
+  { name: "green peas",           vegetarian: true,  glutenFree: true,  organic: true,  vegan: true,   lactoseFree: true,  price: 3.99 },
+  { name: "almond milk",          vegetarian: true,  glutenFree: true,  organic: true,  vegan: true,   lactoseFree: true,  price: 3.49 },
 ];
 
 
@@ -25,6 +28,10 @@ function restrictListProducts(prods, restrictionOrPrefs, sortOrder = "asc") {
       if (restrictionOrPrefs === "Vegetarian" && prods[i].vegetarian === true) {
         product_names.push(prods[i].name);
       } else if (restrictionOrPrefs === "GlutenFree" && prods[i].glutenFree === true) {
+        product_names.push(prods[i].name);
+      } else if (restrictionOrPrefs === "LactoseFree" && prods[i].lactoseFree === true) {
+        product_names.push(prods[i].name);
+      } else if (restrictionOrPrefs === "Vegan" && prods[i].vegan === true) {
         product_names.push(prods[i].name);
       } else if (restrictionOrPrefs === "None") {
         product_names.push(prods[i].name);
@@ -39,6 +46,8 @@ function restrictListProducts(prods, restrictionOrPrefs, sortOrder = "asc") {
   let filtered = prods.filter(p => {
     if (prefs.vegetarian && !p.vegetarian) return false;
     if (prefs.glutenFree && !p.glutenFree) return false;
+    if (prefs.lactoseFree && !p.lactoseFree) return false;
+    if (prefs.vegan && !p.vegan) return false;
 
     if (prefs.organicChoice === "Organic" && !p.organic) return false;
     if (prefs.organicChoice === "NonOrganic" && p.organic) return false;

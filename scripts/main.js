@@ -20,11 +20,13 @@ function openInfo(btn, tabName) {
 function getUserPreferences() {
   const vegetarian = document.getElementById("prefVegetarian")?.checked || false;
   const glutenFree = document.getElementById("prefGlutenFree")?.checked || false;
+  const lactoseFree = document.getElementById("prefLactoseFree")?.checked || false;
+  const vegan = document.getElementById("prefVegan")?.checked || false;
 
   const organicChoice =
     document.querySelector('input[name="prefOrganic"]:checked')?.value || "Any";
 
-  return { vegetarian, glutenFree, organicChoice };
+  return { vegetarian, glutenFree, lactoseFree, vegan, organicChoice };
 }
 
 function showPrefsSummary(prefs) {
@@ -34,6 +36,8 @@ function showPrefsSummary(prefs) {
   const parts = [];
   if (prefs.vegetarian) parts.push("Vegetarian");
   if (prefs.glutenFree) parts.push("Gluten-free");
+  if (prefs.lactoseFree) parts.push("Lactose-free");
+  if (prefs.vegan) parts.push("Vegan");
   if (prefs.organicChoice !== "Any")
     parts.push(`Preference: ${prefs.organicChoice}`);
 
@@ -108,6 +112,11 @@ function selectedItems() {
     }
   }
 
+  if (chosenProducts.length === 0) {
+    c.innerHTML = "<p><em>Your cart is currently empty.</em></p>";
+    return;
+  }
+
   c.appendChild(para);
 
   const total = getTotalPrice(chosenProducts);
@@ -162,6 +171,15 @@ document.addEventListener("DOMContentLoaded", () => {
   // Default open Client tab
   const firstTab = document.querySelector(".tablinks");
   if (firstTab) firstTab.click();
+
+  // Apply Visual Accessibilty 
+  const fontSizeSelect = document.getElementById("fontSizeSelect");
+  if (fontSizeSelect) {
+    document.body.style.fontSize = fontSizeSelect.value + "px";
+    fontSizeSelect.addEventListener("change", () => {
+      document.body.style.fontSize = fontSizeSelect.value +"px";
+    });
+  }
 
   // Apply preferences button
   const btn = document.getElementById("applyPrefsBtn");

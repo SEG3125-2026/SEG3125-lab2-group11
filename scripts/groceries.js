@@ -4,19 +4,19 @@
 
 // Product list (10 items)
 var products = [
-  { name: "brocoli",              vegetarian: true,  glutenFree: true,  organic: true,  vegan: true,   lactoseFree: true,  price: 1.99 },
-  { name: "bread",                vegetarian: true,  glutenFree: false, organic: false, vegan: false,  lactoseFree: true,  price: 2.35 },
-  { name: "salmon",               vegetarian: false, glutenFree: true,  organic: false, vegan: false,  lactoseFree: true,  price: 10.00 },
-  { name: "tofu",                 vegetarian: true,  glutenFree: true,  organic: true,  vegan: true,   lactoseFree: true,  price: 3.49 },
-  { name: "chicken breast",       vegetarian: false, glutenFree: true,  organic: true,  vegan: false,  lactoseFree: true,  price: 7.99 },
-  { name: "pasta",                vegetarian: true,  glutenFree: false, organic: false, vegan: false,  lactoseFree: true,  price: 2.89 },
-  { name: "eggs",                 vegetarian: true,  glutenFree: true,  organic: true,  vegan: false,  lactoseFree: true,  price: 4.29 },
-  { name: "milk",                 vegetarian: true,  glutenFree: true,  organic: false, vegan: false,  lactoseFree: false, price: 2.79 },
-  { name: "apples",               vegetarian: true,  glutenFree: true,  organic: true,  vegan: true,   lactoseFree: true,  price: 3.99 },
-  { name: "ground beef",          vegetarian: false, glutenFree: true,  organic: false, vegan: false,  lactoseFree: true,  price: 8.49 },
-  { name: "lactose-free milk",    vegetarian: true,  glutenFree: true,  organic: false, vegan: false,  lactoseFree: true,  price: 6.79 },
-  { name: "green peas",           vegetarian: true,  glutenFree: true,  organic: true,  vegan: true,   lactoseFree: true,  price: 3.99 },
-  { name: "almond milk",          vegetarian: true,  glutenFree: true,  organic: true,  vegan: true,   lactoseFree: true,  price: 3.49 },
+  { name: "brocoli", vegetarian: true,  glutenFree: true,  organic: true,  vegan: true,   lactoseFree: true,  price: 1.99, img: "images/brocoli.png" },
+  { name: "bread", vegetarian: true,  glutenFree: false, organic: false, vegan: false,  lactoseFree: true,  price: 2.35, img: "images/bread.png" },
+  { name: "salmon", vegetarian: false, glutenFree: true,  organic: false, vegan: false,  lactoseFree: true,  price: 10.00, img: "images/salmon.png" },
+  { name: "tofu", vegetarian: true,  glutenFree: true,  organic: true,  vegan: true,   lactoseFree: true,  price: 3.49, img: "images/tofu.png" },
+  { name: "chicken breast",vegetarian: false, glutenFree: true,  organic: true,  vegan: false,  lactoseFree: true,  price: 7.99, img:"images/chicken_breast.png" },
+  { name: "pasta", vegetarian: true,  glutenFree: false, organic: false, vegan: false,  lactoseFree: true,  price: 2.89,img:"images/pasta.png" },
+  { name: "eggs", vegetarian: true,  glutenFree: true,  organic: true,  vegan: false,  lactoseFree: true,  price: 4.29, img:"images/eggs.png" },
+  { name: "milk", vegetarian: true,  glutenFree: true,  organic: false, vegan: false,  lactoseFree: false, price: 2.79, img:"images/milk.png" },
+  { name: "apples", vegetarian: true,  glutenFree: true,  organic: true,  vegan: true,   lactoseFree: true,  price: 3.99, img:"images/apples.png" },
+  { name: "ground beef", vegetarian: false, glutenFree: true,  organic: false, vegan: false,  lactoseFree: true,  price: 8.49, img:"images/ground_beef.png" },
+  { name: "lactose-free milk", vegetarian: true,  glutenFree: true,  organic: false, vegan: false,  lactoseFree: true,  price: 6.79, img:"images/lactoseFreeMilk.png" },
+  { name: "green peas", vegetarian: true,  glutenFree: true,  organic: true,  vegan: true,   lactoseFree: true,  price: 3.99, img:"images/peas.png" },
+  { name: "almond milk",  vegetarian: true,  glutenFree: true,  organic: true,  vegan: true,   lactoseFree: true,  price: 3.49, img:"images/almondMilk.png" },
 ];
 
 

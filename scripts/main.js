@@ -64,26 +64,45 @@ function populateProductsFromPrefs(prefs, divId) {
     return;
   }
 
+  //CORRECT THIS
   for (let i = 0; i < optionArray.length; i++) {
-    const productName = optionArray[i];
+  const productName = optionArray[i];
+  const prodObj = products.find((p) => p.name === productName);
 
-    const checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.name = "product";
-    checkbox.value = productName;
+  const card = document.createElement("label");
+  card.className = "product-card";
 
-    const label = document.createElement("label");
+  const checkbox = document.createElement("input");
+  checkbox.type = "checkbox";
+  checkbox.name = "product";
+  checkbox.value = productName;
 
-    // show name + price (price pulled from products array)
-    const prodObj = products.find((p) => p.name === productName);
-    const priceText = prodObj ? ` — $${prodObj.price.toFixed(2)}` : "";
+  const img = document.createElement("img");
+  img.className = "product-img";
+  img.src = prodObj?.img || "images/placeholder.jpg";
+  img.alt = productName;
 
-    label.appendChild(document.createTextNode(" " + productName + priceText));
+  const info = document.createElement("div");
+  info.className = "product-info";
 
-    s2.appendChild(checkbox);
-    s2.appendChild(label);
-    s2.appendChild(document.createElement("br"));
-  }
+  const name = document.createElement("div");
+  name.className = "product-name";
+  name.textContent = productName;
+
+  const price = document.createElement("div");
+  price.className = "product-price";
+  price.textContent = prodObj ? `$${prodObj.price.toFixed(2)}` : "";
+
+  info.appendChild(name);
+  info.appendChild(price);
+
+  card.appendChild(checkbox);
+  card.appendChild(img);
+  card.appendChild(info);
+
+  s2.appendChild(card);
+}
+
 }
 
 /* =========================

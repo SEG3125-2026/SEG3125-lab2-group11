@@ -112,34 +112,46 @@ function populateProductsFromPrefs(prefs, divId) {
    Cart (existing logic + total to 2 decimals)
    ========================= */
 function selectedItems() {
-  const ele = document.getElementsByName("product");
+  const ele =document.getElementsByName("product");
   const chosenProducts = [];
 
-  const c = document.getElementById("displayCart");
-  c.innerHTML = "";
-
-  const para = document.createElement("P");
-  para.innerHTML = "You selected : ";
-  para.appendChild(document.createElement("br"));
-
-  for (let i = 0; i < ele.length; i++) {
-    if (ele[i].checked) {
-      para.appendChild(document.createTextNode(ele[i].value));
-      para.appendChild(document.createElement("br"));
-      chosenProducts.push(ele[i].value);
-    }
+  for(let i = 0; i < ele.length; i++) {
+    if (ele[i].checked) chosenProducts.push(ele[i].value);
   }
 
-  if (chosenProducts.length === 0) {
-    c.innerHTML = "<p><em>Your cart is currently empty.</em></p>";
+  const cartDiv = document.getElementById("displayCart");
+  cartDiv.innerHTML = "";
+
+  if(chosenProducts.length === 0) {
+    cartDiv.innerHTML = "<p><em>Your cart is currently empty.</em></p>";
     return;
   }
 
-  c.appendChild(para);
+  const title= document.createElement("p");
+  title.innerHTML= "<b>You selected:</b>";
+  cartDiv.appendChild(title);
 
+  const list = document.createElement("div");
+  list.className = "cart-list";
+
+  chosenProducts.forEach((name) => {
+     const item = document.createElement ("div");
+    item.className = "cart-item-simple";
+    item.textContent = name + ` - $${products.find(p => p.name === name).price.toFixed(2)}`;
+    list.appendChild(item); 
+  });
+
+  cartDiv.appendChild(list);
+  
+//for the total price at the end of the cart
   const total = getTotalPrice(chosenProducts);
-  c.appendChild(document.createTextNode("Total Price is $" + total.toFixed(2)));
+  const totalBox = document.createElement("div");
+  totalBox.className = "cart-total-box";
+  totalBox.textContent = `Total Price: $${total.toFixed(2)}`;
+
+  cartDiv.appendChild(totalBox);
 }
+
 
 /* =========================
    Clear cart / restart
